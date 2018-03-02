@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DeepstreamService } from '../../services/deepstream.service';
+import { Player } from '../models/player.model';
 
 @Component({
   selector: 'app-pvp-battle',
@@ -13,8 +14,10 @@ export class PvpBattleComponent implements OnInit {
   text: string;
   chats;
   chatArray = [];
-  health = 1000;
-  total = 1000;
+  playerOne: Player;
+  players: Player[];
+  users: Set<string> = new Set<string>();
+
 
   constructor(
     private ds: DeepstreamService
@@ -24,32 +27,32 @@ export class PvpBattleComponent implements OnInit {
     // Get username from
     // window prompt and use 'anonymous' for
     // null or invalid response
-    const defaultUsername = 'anonymous';
+    const defaultUsername = 'Randy McRandyson';
     const username = window.prompt('Please enter your username', defaultUsername);
 
-    this.username = username || defaultUsername;
+    this.username = username || 'Randy McRandyson ' + Math.random();
+    this.getPlayer(this.username);
     // Login without credentials
     this.ds.login(null, this.loginHandler);
 
-    this.chats = this.ds.getList('chats');
+    this.chats = this.ds.getList('chat');
+
+    const message = this.ds.getRecord('chat');
+    message.whenReady(() => {
+      const list = message.get();
+      list.forEach(elem => {
+        this.users.add(elem.get('username'));
+      });
+    });
+    console.log(this.users);
 
     this.chats.on('entry-added', recordName => {
 
       this.ds.getRecord(recordName).whenReady(record => {
         record.subscribe((data) => {
           if (data.username && data.text) {
-            // Update bindable property
             this.chatArray.push(data);
-            if (data.username !== this.username) {
-              if (data.text.charAt(0) === '/') {
-                if (data.text.substr(1, 7)) {
-                  if (Number(data.text.substr(8, data.text.length))) {
-                    const damage = Number(data.text.substr(8, data.text.length));
-                    this.health -= damage;
-                  }
-                }
-              }
-            }
+            this.parseChatAction(data.username, data.text);
           }
         }, true);
       });
@@ -69,5 +72,15 @@ export class PvpBattleComponent implements OnInit {
     this.text = '';
     // Update the chats list
     this.chats.addEntry(recordName);
+  }
+
+  getPlayer(name: string) {
+    this.playerOne = new Player(1, 1000, 1000, 100, 100, 1, 1, 1, 1, null);
+  }
+
+  parseChatAction(user: string, text: string) {
+    if (text === 'New Player') {
+
+    }
   }
 }
