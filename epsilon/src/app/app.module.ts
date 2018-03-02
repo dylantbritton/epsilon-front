@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { PvpBattleComponent } from './pvp-battle/pvp-battle.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { DeepstreamService } from '../services/deepstream.service';
+import { PlayerService } from '../services/player.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -16,10 +18,12 @@ import { DeepstreamService } from '../services/deepstream.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [
-    DeepstreamService
+    DeepstreamService,
+    PlayerService
   ],
   bootstrap: [AppComponent]
 })
