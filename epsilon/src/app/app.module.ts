@@ -6,20 +6,28 @@ import { AppComponent } from './app.component';
 import { PvpBattleComponent } from './pvp-battle/pvp-battle.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { DeepstreamService } from '../services/deepstream.service';
+import { PlayerService } from '../services/player.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    PvpBattleComponent
+    PvpBattleComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    NgbModule.forRoot()
   ],
   providers: [
-    DeepstreamService
+    DeepstreamService,
+    PlayerService
   ],
   bootstrap: [AppComponent]
 })

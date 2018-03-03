@@ -3,6 +3,7 @@ import { Ability } from './ability.model';
 export class Player {
 
     id: number;
+    name: string;
     maxHealth: number;
     currentHealth: number;
     maxMana: number;
@@ -14,10 +15,11 @@ export class Player {
     abilitySet: Set<Ability>;
 
 
-    constructor($id: number, $maxHealth: number, $currentHealth: number, $maxMana: number, $currentMana: number,
+    constructor($id: number, $name: string, $maxHealth: number, $currentHealth: number, $maxMana: number, $currentMana: number,
         $strength: number, $speed: number, $defense: number, $magic: number, $abilitySet: Set<Ability>) {
 
         this.id = $id;
+        this.name = $name;
         this.maxHealth = $maxHealth;
         this.currentHealth = $currentHealth;
         this.maxMana = $maxMana;
