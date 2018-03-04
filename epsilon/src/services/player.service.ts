@@ -11,12 +11,12 @@ export class PlayerService {
 
   constructor(private http: HttpClient) { }
 
-  getAllUsers(): Observable<Player>{
+  getAllUsers(): Observable<Player> {
     return this.http.get<Player>(this.url).map(
       (response) => {
          return response;
       }
-    )
+    );
   }
 
 }

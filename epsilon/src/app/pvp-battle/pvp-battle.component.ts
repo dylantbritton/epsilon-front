@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DeepstreamService } from '../../services/deepstream.service';
 import { Player } from '../models/player.model';
 import { PlayerService } from '../../services/player.service';
+import { Ability } from '../models/ability.model';
 
 @Component({
   selector: 'app-pvp-battle',
@@ -19,6 +20,7 @@ export class PvpBattleComponent implements OnInit {
   players: Player[];
   users: Set<string> = new Set<string>();
   chatRoomName = 'chat';
+  selectedAbility: Ability;
 
 
   constructor(private ds: DeepstreamService, private playerService: PlayerService) { }
@@ -61,7 +63,11 @@ export class PvpBattleComponent implements OnInit {
         record.subscribe((data) => {
           if (data.username && data.text) {
             this.chatArray.push(data);
-            this.parseChatAction(data.username, data.text);
+            if (data.ability && data.toPlayer) {
+              this.parseChatAction(data.username, data.text, data.ability, data.toPlayer);
+            } else {
+              this.parseChatAction(data.username, data.text, null, null);
+            }
           }
         }, true);
       });
@@ -91,7 +97,7 @@ export class PvpBattleComponent implements OnInit {
     });
   }
 
-  parseChatAction(user: string, text: string) {
+  parseChatAction(user: string, text: string, ability: Ability, toPlayer: string) {
     if (text === 'Leaving') {
       this.users.delete(user);
     }
@@ -101,6 +107,24 @@ export class PvpBattleComponent implements OnInit {
     if (text === '//Clear-Room') {
       this.clear();
     }
+    if (text === '/Perform Ability/') {
+      if (this.playerOne.name === toPlayer) {
+        this.takeAction(ability);
+      }
+    }
+  }
+
+  takeAction(ability: Ability) {
+    if ((this.playerOne.currentHealth - ability.damage) <= 0) {
+      this.killed();
+    } else {
+      this.playerOne.currentHealth -= ability.damage;
+    }
+  }
+
+  killed() {
+    this.playerOne.currentHealth = 0;
+    this.playerOne.abilitySet = new Set<Ability>();
   }
 
   clear() {
@@ -121,5 +145,20 @@ export class PvpBattleComponent implements OnInit {
         });
       });
     });
+  }
+
+  onSelectionChange(ability) {
+    this.selectedAbility = ability;
+  }
+
+  performAbility(username) {
+    this.text = '/Perform Ability/';
+    const recordName = this.chatRoomName + '/' + this.ds.dsInstance.getUid();
+
+    const chatRecord = this.ds.getRecord(recordName);
+    chatRecord.set({ username: this.username, text: this.text, ability: this.selectedAbility, toPlayer: username });
+    this.text = '';
+    // Update the chats list
+    this.chats.addEntry(recordName);
   }
 }
