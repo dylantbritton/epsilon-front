@@ -2,16 +2,34 @@
   <h1>
     Welcome to {{ title }}!
   </h1>
+  <input type="button" value="Leave Room" (click)="leaveRoom()">
   <div class="progress">
     <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0"
-      aria-valuemax="100" [style.width]="((health/total)*100)+'%'"></div>
+      aria-valuemax="100" [style.width]="((playerOne.currentHealth/playerOne.maxHealth)*100)+'%'"></div>
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+      aria-valuemax="100" [style.width]="((playerOne.currentMana/playerOne.maxMana)*100)+'%'"></div>
+  </div>
+  <div class="row">
+    <div class="col" *ngFor="let player of users">
+      <img (click)="performAbility(player)" class="opponents" placement="bottom" [ngbTooltip]="player" width="75" alt="Angular Logo" src=".\assets\goku.png">
+    </div>
   </div>
   <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 </div>
-<div class="chats">
-  <p *ngFor="let chat of chatArray">
-    <strong>{{chat.username}}: </strong> {{chat.text}}</p>
+<div class="row">
+  <div *ngFor="let ability of playerOne.abilitySet; let i = index" class="custom-control custom-radio custom-control-inline">
+    <input class="custom-control-input" type="radio" [id]="'ability'+i" name="Abilities" [value]="ability.name" (change)=onSelectionChange(ability)>
+    <label class="custom-control-label" [for]="'ability'+i">{{ability.name}}</label>
+  </div>
 </div>
+<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+  <ngb-panel title="Chat" class="chats">
+    <ng-template ngbPanelContent>
+      <p *ngFor="let chat of chatArray">
+        <strong>{{chat.username}}: </strong> {{chat.text}}</p>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
 <div class="compose">
   <input type="text" [(ngModel)]="text" (keyup.enter)="addChat()">
   <button (click)="addChat()">Send</button>

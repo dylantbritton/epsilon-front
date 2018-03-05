@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { PvpBattleComponent } from './pvp-battle/pvp-battle.component';
+import { HomeComponent } from './home/home.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/pvp', pathMatch: 'full' },
-  { path: 'pvp', component: PvpBattleComponent }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'pvp', component: PvpBattleComponent },
+  { path: 'home', component: HomeComponent }
 ];
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],

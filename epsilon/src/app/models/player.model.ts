@@ -1,9 +1,9 @@
-import { Ability } from "./ability.model";
+import { Ability } from './ability.model';
 
 export class Player {
 
     id: number;
-    name:string;
+    name: string;
     maxHealth: number;
     currentHealth: number;
     maxMana: number;
@@ -13,11 +13,10 @@ export class Player {
     defense: number;
     magic: number;
     abilitySet: Set<Ability>;
-    keyBinding: Number;
 
 
-    constructor($id: number, $name:string, $maxHealth: number, $currentHealth: number, $maxMana: number, $currentMana: number, 
-        $strength: number, $speed: number, $defense: number, $magic: number, $abilitySet: Set<Ability>, $keyBinding: Number) {
+    constructor($id: number, $name: string, $maxHealth: number, $currentHealth: number, $maxMana: number, $currentMana: number,
+        $strength: number, $speed: number, $defense: number, $magic: number, $abilitySet: Set<Ability>) {
 
         this.id = $id;
         this.name = $name;
@@ -30,7 +29,6 @@ export class Player {
         this.defense = $defense;
         this.magic = $magic;
         this.abilitySet = $abilitySet;
-        this.keyBinding = $keyBinding;
     }
 
 }
